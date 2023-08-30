@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:iclub/login.dart';
 
+import 'login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,10 +15,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home:LoginApp()
+      home: LoginApp()
     );
   }
 }
