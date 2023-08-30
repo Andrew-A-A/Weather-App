@@ -8,7 +8,7 @@ var emailController = TextEditingController();
 var passwordController = TextEditingController();
 
 class LoginApp extends StatelessWidget {
-  const LoginApp({super.key});
+   LoginApp({super.key});
 
 
   @override
@@ -51,17 +51,20 @@ class LoginApp extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20,right: 20,bottom: 20),
+                  padding:  EdgeInsets.only(left: 20,right: 20,bottom: 20),
                   child: TextFormField(
                     keyboardType: TextInputType.visiblePassword,
                     controller: passwordController,
-                    obscureText: true,
+                    obscureText: cubit.hidePassword,
                     enableSuggestions: false,
                     autocorrect: false,
-                    decoration: const InputDecoration(
+                    decoration:  InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: "Password",
-                        prefixIcon: Icon(Icons.password)
+                        prefixIcon: Icon(Icons.password),
+                      suffixIcon: GestureDetector(child:(cubit.hidePassword) ?const Icon(Icons.remove_red_eye_outlined):const Icon(Icons.remove_red_eye_rounded), onTap:(){
+                        cubit.switchPasswordVisibility();
+                        },)
                     ),),
                 ),
                 //TODO: Add action when login button is pressed

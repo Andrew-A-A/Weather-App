@@ -1,5 +1,3 @@
-import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:iclub/App_cubit/App_states.dart';
@@ -8,10 +6,10 @@ class AppCubit extends Cubit<AppStates>{
   AppCubit():super(AppInitialState());
 
   static AppCubit get(context)=> BlocProvider.of(context);
+  bool hidePassword=true;
+
   late Database database;
-
   //create database
-
   void createDatabase() {
     openDatabase(
       'AppDB.db',
@@ -77,5 +75,15 @@ class AppCubit extends Cubit<AppStates>{
      // emit(getDataFromDatabaseState());
       print(users);
     });
+  }
+  void switchPasswordVisibility(){
+    if(hidePassword) {
+      hidePassword=false;
+
+    } else {
+      hidePassword=true;
+    }
+
+    emit(ShowPasswordState());
   }
 }
