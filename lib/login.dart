@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iclub/signup.dart';
 
 import 'App_cubit/App_cubit.dart';
 import 'App_cubit/App_states.dart';
@@ -85,10 +86,12 @@ class LoginApp extends StatelessWidget {
                     children:[
                       const Padding(
                         padding: EdgeInsets.only(left: 30 ),
-                        child: Text("New to the app?", style: TextStyle(fontFamily: 'Roboto')),
+                        child: Text("New to the app?", style: TextStyle(fontFamily: 'Roboto',color: Colors.grey)),
                       ),
                       //TODO: Add action when register button is pressed
-                      TextButton(onPressed: (){}, child: const Text("Register"))
+                      TextButton(onPressed: (){
+                        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=> const Signup()));
+                      }, child: const Text("Register"))
                     ]
                  )
               ],
