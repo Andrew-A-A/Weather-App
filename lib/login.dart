@@ -65,7 +65,8 @@ class LoginApp extends StatelessWidget {
                     ),),
                 ),
                 //TODO: Add action when login button is pressed
-                TextButton(onPressed: (){}, style: TextButton.styleFrom(
+                TextButton(onPressed: (){},
+                  style: TextButton.styleFrom(
 
                     foregroundColor: Colors.white,
                     backgroundColor: Colors.blueAccent,
@@ -73,8 +74,17 @@ class LoginApp extends StatelessWidget {
                 )
 
                  
-                  , child: const Text("Login",) ,)
-
+                  , child: const Text("Login",) ,),
+                 const SizedBox(height: 20),
+                 Row(
+                    children:[
+                      const Padding(
+                        padding: EdgeInsets.only(left: 30 ),
+                        child: Text("New to the app?", style: TextStyle(fontFamily: 'Roboto')),
+                      ),
+                      //TODO: Add action when register button is pressed
+                      TextButton(onPressed: (){}, child: const Text("Register"))
+                    ])
               ],
 
             ),
