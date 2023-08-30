@@ -79,11 +79,9 @@ class AppCubit extends Cubit<AppStates>{
   void switchPasswordVisibility(){
     if(hidePassword) {
       hidePassword=false;
-
     } else {
       hidePassword=true;
     }
-
     emit(ShowPasswordState());
   }
 }

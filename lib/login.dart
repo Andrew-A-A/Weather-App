@@ -8,7 +8,7 @@ var emailController = TextEditingController();
 var passwordController = TextEditingController();
 
 class LoginApp extends StatelessWidget {
-   LoginApp({super.key});
+   const LoginApp({super.key});
 
 
   @override
@@ -28,30 +28,31 @@ class LoginApp extends StatelessWidget {
             body: Column(
               children: [
                 Image.asset('assets/images/login.jpg',scale: 6,alignment: Alignment.topCenter,fit: BoxFit.contain ),
+                //First row contains word 'Login' only
                 const Row(
                     children:[
                       Padding(
                         padding: EdgeInsets.only(left: 20,bottom: 15 , top: 15),
                         child: Text("Login", style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30,fontFamily: 'Roboto') ),
                       ),
-                    ])
-                ,
-
+                    ]),
+                //Email text box
                 Padding(
                   padding: const EdgeInsets.only(left: 20,right: 20),
                   child: TextFormField(
                     keyboardType: TextInputType.emailAddress,
-
-                      controller: emailController,
+                    controller: emailController,
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: "Email",
                         prefixIcon: Icon(Icons.mail_outline_rounded)
-                    ),),
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 20),
+                //Password text box
                 Padding(
-                  padding:  EdgeInsets.only(left: 20,right: 20,bottom: 20),
+                  padding:  const EdgeInsets.only(left: 20,right: 20,bottom: 20),
                   child: TextFormField(
                     keyboardType: TextInputType.visiblePassword,
                     controller: passwordController,
@@ -59,26 +60,27 @@ class LoginApp extends StatelessWidget {
                     enableSuggestions: false,
                     autocorrect: false,
                     decoration:  InputDecoration(
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
                         labelText: "Password",
-                        prefixIcon: Icon(Icons.password),
+                        prefixIcon: const Icon(Icons.password),
                       suffixIcon: GestureDetector(child:(cubit.hidePassword) ?const Icon(Icons.remove_red_eye_outlined):const Icon(Icons.remove_red_eye_rounded), onTap:(){
                         cubit.switchPasswordVisibility();
                         },)
                     ),),
                 ),
                 //TODO: Add action when login button is pressed
-                TextButton(onPressed: (){},
-                  style: TextButton.styleFrom(
-
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.blueAccent,
-                  padding: const EdgeInsets.symmetric(horizontal:170,vertical: 15)
-                )
-
-                 
-                  , child: const Text("Login",) ,),
+                //Login button
+                TextButton(
+                    onPressed: (){},
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.blueAccent,
+                      padding: const EdgeInsets.symmetric(horizontal:170,vertical: 15)
+                ),
+                    child: const Text("Login")
+                ),
                  const SizedBox(height: 20),
+                 //Last row contains signup text and button
                  Row(
                     children:[
                       const Padding(
@@ -87,11 +89,10 @@ class LoginApp extends StatelessWidget {
                       ),
                       //TODO: Add action when register button is pressed
                       TextButton(onPressed: (){}, child: const Text("Register"))
-                    ])
+                    ]
+                 )
               ],
-
             ),
-
           );
         },
       ),
