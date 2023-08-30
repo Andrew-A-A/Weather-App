@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:iclub/login.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +18,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Scaffold(body: Text("Hello"),),
+      home:LoginApp()
     );
   }
 }
