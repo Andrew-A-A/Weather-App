@@ -88,7 +88,6 @@ class LoginApp extends StatelessWidget {
                         padding: EdgeInsets.only(left: 30 ),
                         child: Text("New to the app?", style: TextStyle(fontFamily: 'Roboto',color: Colors.grey)),
                       ),
-                      //TODO: Add action when register button is pressed
                       TextButton(onPressed: (){
                         Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=> const Signup()));
                       }, child: const Text("Register"))
