@@ -9,7 +9,8 @@ var emailController = TextEditingController();
 var passwordController = TextEditingController();
 
 class LoginApp extends StatelessWidget {
-   const LoginApp({super.key});
+  var formKey = GlobalKey<FormState>();
+  //LoginApp({super.key});
 
 
   @override
@@ -33,21 +34,33 @@ class LoginApp extends StatelessWidget {
                 const Row(
                     children:[
                       Padding(
-                        padding: EdgeInsets.only(left: 20,bottom: 15 , top: 15),
+                        padding: EdgeInsets.only(left: 20,/*bottom: 15 ,*/ top: 15),
                         child: Text("Login", style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30,fontFamily: 'Roboto') ),
                       ),
                     ]),
+          Form(
+          key:formKey,
+          child: Column(
+          children:[
                 //Email text box
                 Padding(
                   padding: const EdgeInsets.only(left: 20,right: 20),
                   child: TextFormField(
                     keyboardType: TextInputType.emailAddress,
-                    controller: emailController,
+                    controller: cubit.emailController,
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: "Email",
                         prefixIcon: Icon(Icons.mail_outline_rounded)
                     ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Email Must Not Be Empty";
+                      }
+                      cubit.wrongEmail(email: value);
+                      return cubit.emailcheck;
+                    //  return null;
+                    },
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -56,7 +69,7 @@ class LoginApp extends StatelessWidget {
                   padding:  const EdgeInsets.only(left: 20,right: 20,bottom: 20),
                   child: TextFormField(
                     keyboardType: TextInputType.visiblePassword,
-                    controller: passwordController,
+                    controller: cubit.passwordController,
                     obscureText: cubit.hidePassword,
                     enableSuggestions: false,
                     autocorrect: false,
@@ -67,12 +80,28 @@ class LoginApp extends StatelessWidget {
                       suffixIcon: GestureDetector(child:(cubit.hidePassword) ?const Icon(Icons.remove_red_eye_outlined):const Icon(Icons.remove_red_eye_rounded), onTap:(){
                         cubit.switchPasswordVisibility();
                         },)
-                    ),),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Password Must Not Be Empty";
+                      }
+                      cubit.wrongPassword(password: value);
+                      return cubit.passwordcheck;
+                      //return null;
+                    },
+                  ),
                 ),
+          ],
+          ),
+          ),
                 //TODO: Add action when login button is pressed
                 //Login button
-                TextButton(
-                    onPressed: (){},
+                ElevatedButton(
+                    onPressed: () {
+                      if (formKey.currentState!.validate()) {
+                        print("FOUND!!");
+                      }
+                    },
                     style: TextButton.styleFrom(
                       foregroundColor: Colors.white,
                       backgroundColor: Colors.blueAccent,
@@ -89,7 +118,7 @@ class LoginApp extends StatelessWidget {
                         child: Text("New to the app?", style: TextStyle(fontFamily: 'Roboto',color: Colors.grey)),
                       ),
                       TextButton(onPressed: (){
-                        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=> const Signup()));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=> Signup()));
                       }, child: const Text("Register"))
                     ]
                  )
