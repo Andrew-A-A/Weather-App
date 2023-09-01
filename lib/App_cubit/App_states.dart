@@ -14,3 +14,5 @@ class WrongEmailState extends AppStates{}
 class WrongPasswordState extends AppStates{}
 
 class UniqueEmailState extends AppStates{}
+class LoggedIn extends AppStates{}
+class ShowUserData extends AppStates{}

@@ -1,25 +1,30 @@
+
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iclub/Model/User.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:iclub/App_cubit/App_states.dart';
 
 class AppCubit extends Cubit<AppStates> {
   AppCubit() :super(AppInitialState());
-
+  late User user;
   static AppCubit get(context) => BlocProvider.of(context);
   bool hidePassword = true;
   String? emailcheck;
   String? passwordcheck;
+  String? enteredEmail;
   bool uniqueEmail=false;
+  bool isLoggedIn=false;
   late Database database;
-
-  var nameController = new TextEditingController();
-  var emailController = new TextEditingController();
-  var phoneController = new TextEditingController();
-  var passwordController = new TextEditingController();
+  var nameController = TextEditingController();
+  var emailController = TextEditingController();
+  var phoneController = TextEditingController();
+  var passwordController = TextEditingController();
   var confirmPasswordController = TextEditingController();
-  var ageController = new TextEditingController();
-  var heightController = new TextEditingController();
+  var ageController = TextEditingController();
+  var heightController = TextEditingController();
 
   //create database
   void createDatabase() {
@@ -27,7 +32,9 @@ class AppCubit extends Cubit<AppStates> {
       'AppDB.db',
       version: 1,
       onCreate: (db, version) {
-        print("Database Created");
+        if (kDebugMode) {
+          print("Database Created");
+        }
         db
             .execute(
             "Create Table user (id INTEGER PRIMARY KEY,"
@@ -37,13 +44,19 @@ class AppCubit extends Cubit<AppStates> {
                 "age INTEGER NOT NULL,"
                 "height REAL NOT NULL)")
             .then((value) {
-          print("Table created");
+          if (kDebugMode) {
+            print("Table created");
+          }
         }).catchError((onError) {
-          print("Catched Error is ${onError.toString()}");
+          if (kDebugMode) {
+            print("Caught Error is ${onError.toString()}");
+          }
         });
       },
       onOpen: (db) {
-        print("Database Opened");
+        if (kDebugMode) {
+          print("Database Opened");
+        }
         getDataFromDatabase(database: db);
       },
     ).then((value) {
@@ -51,6 +64,8 @@ class AppCubit extends Cubit<AppStates> {
       emit(createDatabaseState());
     });
   }
+
+
 
   //Inserting to database
   insertToDatabase({
@@ -65,13 +80,17 @@ class AppCubit extends Cubit<AppStates> {
       txn
           .rawInsert(
         // 'Insert into tasks (title,date,time) VALUES ("${title}","${date}","${time}")')
-          'Insert into user (name,email,phone,password,age,height) VALUES ("${name}","${email}","${phone}","${password}",${age},${height})')
+          'Insert into user (name,email,phone,password,age,height) VALUES ("$name","$email","$phone","$password",$age,$height)')
           .then((value) {
-        print("$value insteresd successfully");
+        if (kDebugMode) {
+          print("$value inserted successfully");
+        }
         emit(insertToDatabaseState());
         getDataFromDatabase(database: database);
       }).catchError((onError) {
-        print("inserting Error is ${onError.toString()}");
+        if (kDebugMode) {
+          print("inserting Error is ${onError.toString()}");
+        }
       });
     });
   }
@@ -81,13 +100,21 @@ class AppCubit extends Cubit<AppStates> {
 
   void getDataFromDatabase({
     required Database database
-  }) {
+  }) async {
+    await
     database.rawQuery("Select * from user").then((value) {
       users = value;
       emit(getDataFromDatabaseState());
-      print(users);
+      if (kDebugMode) {
+        print(users);
+      }
     });
   }
+void logout(){
+    isLoggedIn=false;
+    emailController.clear();
+    passwordController.clear();
+}
 
   void switchPasswordVisibility() {
     if (hidePassword) {
@@ -98,35 +125,84 @@ class AppCubit extends Cubit<AppStates> {
     emit(ShowPasswordState());
   }
 
+void loginSucceeded(){
+    isLoggedIn=true;
+    emit(LoggedIn());
+}
+// void getCurrentUserInfo( {required String email , required User user} )  {
+//     //'Insert into user (name,email,phone,password,age,height)
+//
+//   database.rawQuery('SELECT name FROM user WHERE email = "$email"').then((value)
+//   {
+//   user.name=value as String;
+//   });
+//
+//   database.rawQuery('SELECT password FROM user WHERE email = "$email"').then((value)
+//   {
+//     user.password=value as String;
+//   });
+//   database.rawQuery('SELECT phone FROM user WHERE email = "$email"').then((value)
+//   {
+//     user.phone=value as int;
+//   });
+//   database.rawQuery('SELECT age FROM user WHERE email = "$email"').then((value)
+//   {
+//     user.age=value as int;
+//   });
+//   database.rawQuery('SELECT height FROM user WHERE email = "$email"').then((value)
+//   {
+//     user.height=value as int;
+//   });
+//
+// }
+//
+
+  Future<void> getCurrentUserInfo({required String email}) async {
+    //'Insert into user (name,email,phone,password,age,height)
+
+    var name = await database.rawQuery('SELECT name FROM user WHERE email = "$email"');
+    var password = await database.rawQuery('SELECT password FROM user WHERE email = "$email"');
+    var phone = await database.rawQuery('SELECT phone FROM user WHERE email = "$email"');
+    var age = await database.rawQuery('SELECT age FROM user WHERE email = "$email"');
+    var height = await database.rawQuery('SELECT height FROM user WHERE email = "$email"');
+    user= User(name.first['name'] as String, email,phone.first['phone'] as int, password.first['password'] as String, height.first['height'] as double,age.first['age'] as int);
+    emit(ShowUserData());
+  }
+
+
   void wrongEmail({
-    required String email}) {
-    database.rawQuery('SELECT * FROM user WHERE email = "${email}"').then((
-        value) {
+    required String email})  async {
+    await
+    database.rawQuery('SELECT * FROM user WHERE email = "$email"').then((value)
+    {
       if (value.isEmpty) {
         emailcheck = "NO ACCOUNT WITH THIS EMAIL!";
       }
       else{
         emailcheck=null;
+        enteredEmail=email;
       }
     });
     emit(WrongEmailState());
   }
   void wrongPassword({
-    required String password}) {
-    database.rawQuery('SELECT * FROM user WHERE password = "${password}"').then((
+    required String password}) async { await
+    database.rawQuery('SELECT * FROM user WHERE email = "$enteredEmail" AND password = "$password"').then((
         value) {
       if (value.isEmpty) {
-        passwordcheck = "NO ACCOUNT WITH THIS PASSWORD!";
+        passwordcheck = "WRONG PASSWORD!";
       }
       else{
         passwordcheck=null;
       }
     });
+
+
     emit(WrongPasswordState());
   }
   void uniqueEmailCheck({
-    required String email}) {
-    database.rawQuery('SELECT * FROM user WHERE email = "${email}"').then((
+    required String email}) async { await
+    database.rawQuery('SELECT * FROM user WHERE email = "$email"').then((
         value) {
       if (value.isEmpty) {
         uniqueEmail=true;
@@ -138,3 +214,5 @@ class AppCubit extends Cubit<AppStates> {
     emit(UniqueEmailState());
   }
 }
+
+
