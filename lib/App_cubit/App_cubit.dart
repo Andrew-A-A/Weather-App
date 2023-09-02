@@ -18,7 +18,8 @@ class AppCubit extends Cubit<AppStates> {
 
 
   //Variable stores weather info retrieved from the API
-  WeatherInfo? weather ;
+  WeatherInfo weather=WeatherInfo(current: Current(temp: 0, condition: Condition( text: 'Error in API'),
+      feelsLike: 0, windDirection: "N")) ;
 
   //Boolean used to switch show/hide password state
   bool hidePassword = true;

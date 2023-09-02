@@ -37,15 +37,15 @@ class Home extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(currentWeatherIcon(cubit.weather!.current.condition.text),size: 200,color: Colors.white,),
-                    Text(cubit.weather!.current.condition.text,style: const TextStyle(fontSize: 20,color: Colors.white),),
-                    Text("${cubit.weather!.current.temp.toInt()}℃",style: const TextStyle(fontSize: 30,color: Colors.white),),
-                    Text("Feels like: ${cubit.weather!.current.feelsLike.toInt()}℃",style: const TextStyle(color: Colors.white)),
+                    Icon(currentWeatherIcon(cubit.weather.current.condition.text),size: 200,color: Colors.white,),
+                    Text(cubit.weather.current.condition.text,style: const TextStyle(fontSize: 20,color: Colors.white),),
+                    Text("${cubit.weather.current.temp.toInt()}℃",style: const TextStyle(fontSize: 30,color: Colors.white),),
+                    Text("Feels like: ${cubit.weather.current.feelsLike.toInt()}℃",style: const TextStyle(color: Colors.white)),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text("Wind Direction: ",style: TextStyle(color: Colors.white)),
-                        Icon(currentDirectionIcon(cubit.weather!.current.windDirection),size: 20,color: Colors.white,),
+                        Icon(currentDirectionIcon(cubit.weather.current.windDirection),size: 20,color: Colors.white,),
                       ],
                     ),
                   ElevatedButton(onPressed: (){
