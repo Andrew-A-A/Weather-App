@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iclub/Model/User.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:iclub/App_cubit/App_states.dart';
-
 import '../Model/WeatherInfo.dart';
 
 class AppCubit extends Cubit<AppStates> {
@@ -18,7 +17,7 @@ class AppCubit extends Cubit<AppStates> {
   late User user;
 
 
-
+  //Variable stores weather info retrieved from the API
   WeatherInfo? weather ;
 
   //Boolean used to switch show/hide password state
@@ -45,7 +44,6 @@ class AppCubit extends Cubit<AppStates> {
 
   //create database
   late Database database;
-
   void createDatabase() {
     openDatabase(
       'AppDB.db',
@@ -115,7 +113,6 @@ class AppCubit extends Cubit<AppStates> {
 
   //Get from database
   List<Map> users = [];
-
   void getDataFromDatabase({
     required Database database
   }) async {
@@ -131,7 +128,6 @@ class AppCubit extends Cubit<AppStates> {
 
   // Get info of logged in user
   Future<void> getCurrentUserInfo({required String email}) async {
-    //'Insert into user (name,email,phone,password,age,height)
     var name = await database.rawQuery(
         'SELECT name FROM user WHERE email = "$email"');
     var password = await database.rawQuery(
@@ -165,12 +161,11 @@ class AppCubit extends Cubit<AppStates> {
     emit(WrongEmailState());
   }
 
-  // try to match password from database
+  //try to match password from database
   void wrongPassword({
     required String password}) async {
     await
-    database.rawQuery('SELECT * FROM user WHERE email = "${emailController
-        .text}" AND password = "$password"').then((value) {
+    database.rawQuery('SELECT * FROM user WHERE email = "${emailController.text}" AND password = "$password"').then((value) {
       if (value.isEmpty) {
         passwordcheck = "WRONG PASSWORD!";
       }
@@ -178,8 +173,6 @@ class AppCubit extends Cubit<AppStates> {
         passwordcheck = null;
       }
     });
-
-
     emit(WrongPasswordState());
   }
 
@@ -203,6 +196,10 @@ class AppCubit extends Cubit<AppStates> {
     isLoggedIn = false;
     emailController.clear();
     passwordController.clear();
+    heightController.clear();
+    ageController.clear();
+    phoneController.clear();
+    confirmPasswordController.clear();
   }
 
   // Change visibility of password
@@ -221,7 +218,7 @@ class AppCubit extends Cubit<AppStates> {
     emit(LoggedIn());
   }
 
-
+  //Get weather data from API
   Future<void> fetchWeather() async {
     final response = await
     http.get(Uri.parse(
@@ -230,6 +227,7 @@ class AppCubit extends Cubit<AppStates> {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       weather= WeatherInfo.fromJson(jsonDecode(response.body));
+      emit(RefreshWeatherData());
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.

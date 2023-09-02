@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iclub/App_cubit/App_cubit.dart';
 import 'package:iclub/login.dart';
-
 import 'MyBlocObserver.dart';
 
 Future<void> main() async{

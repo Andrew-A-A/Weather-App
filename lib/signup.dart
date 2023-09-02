@@ -28,7 +28,7 @@ class Signup extends StatelessWidget {
                           child: Text("Signup", style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30,fontFamily: 'Roboto') ),
                         ),
                       ]),
-
+                  //Form contains all text boxes
                   Form(
                     key:signupFormKey,
                     child: Column(

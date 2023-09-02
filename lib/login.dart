@@ -20,7 +20,6 @@ class LoginApp extends StatelessWidget {
           body: Column(
             children: [
               Image.asset('assets/images/login.jpg',scale: 6,alignment: Alignment.topCenter,fit: BoxFit.contain ),
-
               //First row contains word 'Login' only
               const Row(
                   children:[
