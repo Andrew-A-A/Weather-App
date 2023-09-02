@@ -6,5 +6,4 @@ class User{
    String password;
    double height;
    int age;
-
 }

@@ -6,14 +6,13 @@ import 'App_cubit/App_cubit.dart';
 import 'App_cubit/App_states.dart';
 import 'home.dart';
 
-
 class LoginApp extends StatelessWidget {
-  var formKey = GlobalKey<FormState>();
+  var loginFormKey = GlobalKey<FormState>();
   LoginApp({super.key});
   @override
   Widget build(BuildContext context){
     AppCubit cubit=BlocProvider.of<AppCubit>(context)..createDatabase();
-
+    cubit.fetchWeather();
     return BlocBuilder<AppCubit,AppStates>(
       builder: (BuildContext context,dynamic state){
         return  Scaffold(
@@ -21,16 +20,18 @@ class LoginApp extends StatelessWidget {
           body: Column(
             children: [
               Image.asset('assets/images/login.jpg',scale: 6,alignment: Alignment.topCenter,fit: BoxFit.contain ),
+
               //First row contains word 'Login' only
               const Row(
                   children:[
                     Padding(
-                      padding: EdgeInsets.only(left: 20,/*bottom: 15 ,*/ top: 15),
+                      padding: EdgeInsets.only(left: 20,bottom: 15 , top: 15),
                       child: Text("Login", style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30,fontFamily: 'Roboto') ),
                     ),
                   ]),
+
               Form(
-                key:formKey,
+                key:loginFormKey,
                 child: Column(
                   children:[
                     //Email text box
@@ -79,9 +80,11 @@ class LoginApp extends StatelessWidget {
                           if (value!.isEmpty) {
                             return "Password Must Not Be Empty";
                           }
-                          cubit.wrongPassword(password: value);
+                          else if(cubit.emailcheck==null) {
+                            cubit.wrongPassword(password: value);
+                          }
                           return cubit.passwordcheck;
-                          //return null;
+
                         },
                       ),
                     ),
@@ -91,9 +94,8 @@ class LoginApp extends StatelessWidget {
 
               //Login button
               ElevatedButton(
-
                   onPressed: () {
-                    if ( formKey.currentState!.validate()) {
+                    if ( loginFormKey.currentState!.validate()) {
                       cubit.loginSucceeded();
                       Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>  const Home()));
                       if (kDebugMode) {
@@ -113,6 +115,7 @@ class LoginApp extends StatelessWidget {
                   child: const Text("Login")
               ),
               const SizedBox(height: 20),
+
               //Last row contains signup text and button
               Row(
                   children:[
@@ -122,13 +125,13 @@ class LoginApp extends StatelessWidget {
                     ),
                     TextButton(onPressed: (){
                       Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=> Signup()));
+                      cubit.loginSucceeded();
                     }, child: const Text("Register"))
                   ]
               )
             ],
           ),
         );
-
       }
     );
 

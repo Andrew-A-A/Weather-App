@@ -6,7 +6,7 @@ import 'App_cubit/App_states.dart';
 
 
 class Signup extends StatelessWidget {
-  var formKey = GlobalKey<FormState>();
+  var signupFormKey = GlobalKey<FormState>();
   Signup({super.key});
 
   @override
@@ -16,7 +16,6 @@ class Signup extends StatelessWidget {
         builder: (BuildContext context,dynamic state){
           return  Scaffold(
             resizeToAvoidBottomInset: true,
-
             body: SingleChildScrollView(
               child: Column(
                 children:<Widget>[
@@ -31,9 +30,10 @@ class Signup extends StatelessWidget {
                       ]),
 
                   Form(
-                    key:formKey,
+                    key:signupFormKey,
                     child: Column(
-                      children:[//Name text box
+                      children:[
+                        //Name text box
                         Padding(
                           padding: const EdgeInsets.only(left: 20,right: 20,bottom: 8),
                           child: TextFormField(
@@ -53,6 +53,7 @@ class Signup extends StatelessWidget {
                             },
                           ),
                         ),
+
                         //Email text box
                         Padding(
                           padding: const EdgeInsets.only(left: 20,right: 20,bottom: 8),
@@ -60,26 +61,31 @@ class Signup extends StatelessWidget {
                             controller: cubit.emailController,
                             keyboardType: TextInputType.emailAddress,
                             textInputAction: TextInputAction.next,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
                                 labelText: "Email",
                                 prefixIcon: Icon(Icons.mail_outline_rounded)
                             ),
-                            validator: (value) {
+                            validator: (value)   {
                               if (value!.isEmpty) {
                                 return "Email Must Not Be Empty";
                               }
-                              if(!value.contains("@")){
+                             else if(!value.contains("@")){
                                 return "Email Must Contain @";
                               }
-                              cubit.uniqueEmailCheck(email: value);
-                              if(!cubit.uniqueEmail){
-                                return "THIS EMAIL ALREADY REGESTERED!!";
+                             else {
+                                cubit.uniqueEmailCheck(email: value);
+                                if (!cubit.uniqueEmail) {
+                                  return "THIS EMAIL ALREADY REGESTERED!!";
+                                }
                               }
+
                               return null;
                             },
                           ),
                         ),
+
                         //؛Phone text box
                         Padding(
                           padding:  const EdgeInsets.only(left: 20,right: 20,bottom: 8),
@@ -101,6 +107,7 @@ class Signup extends StatelessWidget {
                             },
                           ),
                         ),
+
                         //Password text box
                         Padding(
                           padding:  const EdgeInsets.only(left: 20,right: 20,bottom: 8),
@@ -127,6 +134,7 @@ class Signup extends StatelessWidget {
                             },
                           ),
                         ),
+
                         //Confirm password text box
                         Padding(
                           padding:  const EdgeInsets.only(left: 20,right: 20,bottom: 8),
@@ -151,6 +159,7 @@ class Signup extends StatelessWidget {
                             },
                           ),
                         ),
+
                         //Age text box
                         Padding(
                           padding: const EdgeInsets.only(left: 20,right: 20,bottom: 8),
@@ -171,6 +180,7 @@ class Signup extends StatelessWidget {
                             },
                           ),
                         ),
+
                         //Height text box
                         Padding(
                           padding: const EdgeInsets.only(left: 20,right: 20,bottom: 8),
@@ -193,11 +203,11 @@ class Signup extends StatelessWidget {
                       ],
                     ),
                   ),
-                  //TODO: Add action when signup button is pressed
+
                   //Signup button
                   ElevatedButton(
                       onPressed: (){
-                        if (formKey.currentState!.validate()) {
+                        if (signupFormKey.currentState!.validate()) {
                           cubit.insertToDatabase(
                               name: cubit.nameController.text,
                               email: cubit.emailController.text,
@@ -205,18 +215,19 @@ class Signup extends StatelessWidget {
                               password:cubit.passwordController.text,
                               age: int.parse(cubit.ageController.text),
                               height: double.parse(cubit.heightController.text)
-                          );
+                            );
+                          cubit.isLoggedIn=false;
                           Navigator.pop(context);
-                        }
-
-                      },
+                         }
+                        },
                       style: TextButton.styleFrom(
                           foregroundColor: Colors.white,
                           backgroundColor: Colors.blueAccent,
                           padding: const EdgeInsets.symmetric(horizontal:170,vertical: 15)
-                      ),
+                       ),
                       child: const Text("Signup")
                   ),
+
                   //Last row contains login text and button
                   Row(
                       children:[
@@ -224,9 +235,10 @@ class Signup extends StatelessWidget {
                           padding: EdgeInsets.only(left: 30 ),
                           child: Text("Joined us before?", style: TextStyle(fontFamily: 'Roboto',color: Colors.grey)),
                         ),
-                        //TODO: Add action when register button is pressed
+
                         TextButton(onPressed: (){
                           Navigator.pop(context);
+                          cubit.isLoggedIn=false;
                         }, child: const Text("Login"))
                       ]
                   )
@@ -234,9 +246,7 @@ class Signup extends StatelessWidget {
               ),
             ),
           );
-
         }
     );
-
   }
 }

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'App_cubit/App_cubit.dart';
 import 'App_cubit/App_states.dart';
-
-
 
 class Profile extends StatelessWidget {
   const Profile({super.key});
@@ -18,7 +15,6 @@ class Profile extends StatelessWidget {
               appBar: AppBar(title:const Text("Profile")),
               body:  Center(
                 child: Column(
-
                   children: [
                     const Icon(Icons.account_circle,size: 150,color: Colors.black),
                     Text(cubit.user.name,style: const TextStyle(color: Colors.black,fontSize: 40),textAlign: TextAlign.center,),
@@ -29,15 +25,13 @@ class Profile extends StatelessWidget {
                     ElevatedButton(onPressed: (){
                       cubit.logout();
                       Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
-                    }, child: const Text("Logout"))
+                       },
+                        child: const Text("Logout"))
                   ],
                 ),
               ),
           );
-
-
         }
     );
-
   }
 }
