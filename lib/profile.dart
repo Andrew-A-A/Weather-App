@@ -12,7 +12,7 @@ class Profile extends StatelessWidget {
     return BlocBuilder<AppCubit,AppStates>(
         builder: (BuildContext context,dynamic state){
           return  Scaffold(
-              appBar: AppBar(title:const Text("Profile"),backgroundColor: Colors.blue,),
+              appBar: AppBar(title:const Text("Profile",style: TextStyle(color: Colors.white),),backgroundColor: Colors.blue,),
               body:  Center(
                 child: Column(
                   children: [
