@@ -61,7 +61,7 @@ class Signup extends StatelessWidget {
                             controller: cubit.emailController,
                             keyboardType: TextInputType.emailAddress,
                             textInputAction: TextInputAction.next,
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            autovalidateMode: AutovalidateMode.always,
                             decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
                                 labelText: "Email",
@@ -80,8 +80,7 @@ class Signup extends StatelessWidget {
                                   return "THIS EMAIL ALREADY REGESTERED!!";
                                 }
                               }
-
-                              return null;
+                             return null;
                             },
                           ),
                         ),
@@ -207,6 +206,7 @@ class Signup extends StatelessWidget {
                   //Signup button
                   ElevatedButton(
                       onPressed: (){
+
                         if (signupFormKey.currentState!.validate()) {
                           cubit.insertToDatabase(
                               name: cubit.nameController.text,

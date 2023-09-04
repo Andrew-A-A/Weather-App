@@ -72,6 +72,10 @@ IconData currentWeatherIcon(String txt){
       return Icons.wb_cloudy_rounded;
     case "Fog":
       return Icons.foggy;
+    case "Partly cloudy":
+      return Icons.cloud_queue_sharp;
+    case "Error in API":
+      return Icons.error_outline_rounded;
     default:
       return Icons.water_drop;
 
